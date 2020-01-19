@@ -26,10 +26,48 @@
         const ADD_TODO = 'ADD_TODO'
         const REMOVE_TODO = 'REMOVE_TODO'
         const TOGGLE_TODO = 'TOGGLE_TODO'
+
         const ADD_GOAL = 'ADD_GOAL'
         const REMOVE_GOAL = 'REMOVE_GOAL'
+
         const RECEIVE_DATA = 'RECEIVE_DATA'   
     
+        const retrieveJournals = () => {
+            return new Promise(function(resolve, reject) {
+                const journals = [{ name: 'journal 1'}, { name: 'journal 2'}, { name: 'journal 3'}]
+                setTimeout(function() {
+                    resolve(journals); 
+                }, 300);
+            })
+        }
+
+        const saveJournal = (journal) => {
+            return new Promise(function(resolve, reject) {
+                console.log(`journals ${journals}`)
+                setTimeout(function() {
+                    resolve(journal); 
+                }, 300);
+            })
+        }
+
+        const toggleJournal = (journal) => {
+            return new Promise(function(resolve, reject) {
+                console.log(`journals ${journals}`)
+                setTimeout(function() {
+                    resolve(journal); 
+                }, 300);
+            })
+        }
+
+        const removeJournal = (journal) => {
+            console.log(`journals ${journals}`)
+                return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve(journal); 
+                }, 300);
+            })
+        }
+
         const addJournalAction = (journal) => {
             return {
                 type: ADD_JOURNAL,
@@ -93,11 +131,18 @@
             }
         }
 
-        const receiveDataAction = (todos, goals) => {
+        const receiveDataAction = (todos, goals, journals) => {
             return {
                 type: RECEIVE_DATA,
                 todos,
-                goals
+                goals,
+                journals
+            }
+        }
+
+        const handleAddJournal = (name, cb ) => {
+            return (dispatch) => {
+                
             }
         }
 
@@ -160,9 +205,10 @@
             return (dispatch) => {
                return Promise.all([
                         API.fetchTodos(),
-                        API.fetchGoals()
-                    ]).then(([todos, goals ]) => {
-                        dispatch(receiveDataAction(todos, goals))
+                        API.fetchGoals(),
+                        retrieveJournals()
+                    ]).then(([todos, goals, journals ]) => {
+                        dispatch(receiveDataAction(todos, goals, journals))
                     })
                     .catch(()=> alert(`An error occured. Try again.`))               
             }
@@ -192,6 +238,24 @@
         }
 
         // Reducer function(s)
+        const journals = (state = [], action ) => {
+            switch(action.type) {
+                case ADD_JOURNAL:
+                    return state.concat([action.journal])
+                case UPDATE_JOURNAL:
+                    return state.map((journal) => journal.id !== action.id ? journal :
+                        Object.assign({}, journal, { name: journal.name})
+                    )
+                case TOGGLE_JOURNAL:
+                    return state.map((journal) => journal.id !== action.id ? journal :
+                        Object.assign({}, journal, {complete: !journal.complete}))
+                case REMOVE_JOURNAL:
+                    return state.filter((journal) => journal.id !== action.id)
+                default:
+                    return state
+            }
+        }
+
         const todos = (state = [], action) => {
             switch(action.type) {
                 case ADD_TODO:
@@ -234,6 +298,7 @@
         const store = Redux.createStore(Redux.combineReducers({
             todos,
             goals,
+            journals,
             loading
         }), Redux.applyMiddleware(ReduxThunk.default, checker, logger))
     
@@ -318,7 +383,7 @@
                      placeholder='Add Todo'
                      onChange={handleChange}
                     />
-                    <button onClick={addItem}><i className="fa fa-plus" aria-hidden="true"></i></button>
+                    <button onClick={addItem} disabled={name === ''}><i className="fa fa-plus" aria-hidden="true"></i></button>
 
                     <ListHooks items={goals} remove={removeItem} />
                 </div>
