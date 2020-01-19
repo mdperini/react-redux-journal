@@ -9,6 +9,7 @@
     <script src='https://tylermcginnis.com/goals-todos-api/index.js'></script>
     <script src='https://unpkg.com/redux-thunk@2.2.0/dist/redux-thunk.min.js'></script>
     <script src='https://unpkg.com/react-redux@5.0.6/dist/react-redux.min.js'></script>
+    <script src="https://use.fontawesome.com/69096b9f31.js"></script>
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -249,7 +250,7 @@
                         style={{textDecoration: item.complete ? 'line-through' : 'none'}}>
                         {item.name}
                         </span>
-                        <button onClick={() => remove(item)}>X</button>
+                        <button onClick={() => remove(item)}><i className="fa fa-sm fa-times"></i></button>
                         </li>
                     ))}  
                 </ul>
@@ -273,7 +274,7 @@
                 
             return (
                 <div>
-                    <h1>Todos</h1>
+                    <h1><i className="fa fa-leaf" aria-hidden="true"></i>Todos</h1>
                     <input
                         type='text'
                         id='name'
@@ -282,7 +283,7 @@
                         onChange={handleChange}
                     />
                     
-                    <button onClick={addItem}>Add Todo</button>
+                    <button onClick={addItem}><i className="fa fa-plus" aria-hidden="true"></i></button>
                     <ListHooks items={todos} remove={removeItem} toggle={toggleItem} /> 
                 </div>                       
             )
@@ -309,7 +310,7 @@
 
             return (
                 <div>
-                    <h1>Goals</h1>
+                    <h1><i className="fa fa-leaf" aria-hidden="true"></i>Goals</h1>
                     <input
                      type='text'
                      id='name'
@@ -317,7 +318,7 @@
                      placeholder='Add Todo'
                      onChange={handleChange}
                     />
-                    <button onClick={addItem}>Add Goal</button>
+                    <button onClick={addItem}><i className="fa fa-plus" aria-hidden="true"></i></button>
 
                     <ListHooks items={goals} remove={removeItem} />
                 </div>
@@ -342,14 +343,16 @@
                 }, start)
                
             if (loading) {
-                return <h3>Loading 🛸...</h3>
+                return <h3>Loading ... 
+                         <i className="fa fa-spinner fa-spin fa-lg fa-fw"></i>
+                       </h3>
             }
             
             return (
-                <div>
+                <React.Fragment>
                     <ConnectedTodosHooks/>
                     <ConnectedGoalsHooks />
-                </div>
+                </React.Fragment>
             )
         }
 
