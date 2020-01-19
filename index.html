@@ -283,7 +283,7 @@
                         onChange={handleChange}
                     />
                     
-                    <button onClick={addItem}><i className="fa fa-plus" aria-hidden="true"></i></button>
+                    <button onClick={addItem} disabled={name === ''}><i className="fa fa-plus" aria-hidden="true"></i></button>
                     <ListHooks items={todos} remove={removeItem} toggle={toggleItem} /> 
                 </div>                       
             )
@@ -343,9 +343,9 @@
                 }, start)
                
             if (loading) {
-                return <h3>Loading ... 
-                         <i className="fa fa-spinner fa-spin fa-lg fa-fw"></i>
-                       </h3>
+                return <div className="loading">
+                            <i  className="fa fa-spinner fa-spin fa-3x"></i>
+                       </div>
             }
             
             return (
