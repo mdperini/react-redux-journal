@@ -397,7 +397,7 @@
            dispatch
        }))(Todos)
        
-        const GoalsHooks = ({ goals, dispatch }) => {
+        const Goals = ({ goals, dispatch }) => {
             const [name, setName ] = React.useState('')
             const handleChange = (e) => setName(e.target.value)
 
@@ -431,7 +431,7 @@
         const ConnectedGoals = ReactRedux.connect((state, dispatch ) => ({
             goals: state.goals, 
             dispatch
-        }))(GoalsHooks)
+        }))(Goals)
 
         const App = ({ loading, dispatch }) => {
             const [, updateState] = React.useState();
