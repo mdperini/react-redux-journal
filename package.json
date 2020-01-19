@@ -1,7 +1,7 @@
 {
   "name": "react-redux",
   "version": "1.0.0",
-  "description": "React Redux: Journal",
+  "description": "React Redux: Journals / Todos / Goals s",
   "main": "index.js",
   "scripts": {
     "watch:sass": "node-sass sass/main.scss css/style.css -w",

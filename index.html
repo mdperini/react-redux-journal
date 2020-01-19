@@ -1,7 +1,7 @@
 <html lang="en">
         <!DOCTYPE html>
 <head>
-    <title>Todos/Goals</title>
+    <title>Journals / Todos / Goals</title>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
     <script src='https://unpkg.com/react@16.7.0-alpha.0/umd/react.development.js'></script>
     <script src='https://unpkg.com/react-dom@16.7.0-alpha.0/umd/react-dom.development.js'></script>
@@ -17,6 +17,11 @@
     <script type='text/javascript'>
 
         // App code
+        const ADD_JOURNAL = 'ADD_JOURNAL'
+        const UPDATE_JOURNAL = 'UPDATE_JOURNAL'
+        const TOGGLE_JOURNAL = 'TOGGLE_JOURNAL'
+        const REMOVE_JOURNAL = 'REMOVE_JOURNAL'
+        
         const ADD_TODO = 'ADD_TODO'
         const REMOVE_TODO = 'REMOVE_TODO'
         const TOGGLE_TODO = 'TOGGLE_TODO'
@@ -24,6 +29,34 @@
         const REMOVE_GOAL = 'REMOVE_GOAL'
         const RECEIVE_DATA = 'RECEIVE_DATA'   
     
+        const addJournalAction = (journal) => {
+            return {
+                type: ADD_JOURNAL,
+                journal
+            }
+        }
+
+        const updateJournalAction = (journal) => {
+            return {
+                type: UPDATE_JOURNAL,
+                journal
+            }
+        }
+
+        const toggleJournalAction = (id) => {
+            return {
+                type: TOGGLE_JOURNAL,
+                id
+            }
+        }
+
+        const removeJournalAction = (id) => {
+            return {
+                type: REMOVE_JOURNAL,
+                id
+            }
+        }
+
         const addTodoAction = (todo) =>  {
             return {
                 type: ADD_TODO,
@@ -240,7 +273,7 @@
                 
             return (
                 <div>
-                    <h1>Todo List</h1>
+                    <h1>Todos</h1>
                     <input
                         type='text'
                         id='name'
@@ -309,7 +342,7 @@
                 }, start)
                
             if (loading) {
-                return <h3>Loading ...</h3>
+                return <h3>Loading 🛸...</h3>
             }
             
             return (
