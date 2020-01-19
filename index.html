@@ -50,20 +50,20 @@
             })
         }
 
-        const toggleJournal = (journal) => {
+        const toggleJournal = (id) => {
             return new Promise(function(resolve, reject) {
-                console.log(`journals ${journals}`)
+                console.log(`journals ${id}`)
                 setTimeout(function() {
-                    resolve(journal); 
+                    resolve(id); 
                 }, 300);
             })
         }
 
-        const removeJournal = (journal) => {
-            console.log(`journals ${journals}`)
+        const removeJournal = (id) => {
+            console.log(`journals ${id}`)
                 return new Promise(function(resolve, reject) {
                 setTimeout(function() {
-                    resolve(journal); 
+                    resolve(id); 
                 }, 300);
             })
         }
@@ -140,9 +140,47 @@
             }
         }
 
-        const handleAddJournal = (name, cb ) => {
+        const handleAddJournal = (name, cb) => {
             return (dispatch) => {
-                
+                return saveJournal(name)
+                    .then((journal) => {
+                        dispatch(addJournalAction(journal))
+                        cb()                       
+                    })
+                    .catch(() => alert(`An error has occurred. Try again.`))         
+            }
+        }
+
+        const handleUpdateJournel = (name, cb) => {
+            return (dispatch) => {
+                return saveJournal(name)
+                    .then((journal) => {
+                        dispatch(updateJournalAction(journal))
+                        cb
+                    })
+                    .catch(()=> alert(`An error has occurred. Try again.`))
+            }
+        }
+
+        const handleToggleJournal = (id) => {
+            return (dispatch) => {
+                dispatch(toggleJournalAction(id))
+                return toggleJournal(id)
+                    .catch(() => {
+                        dispatch(toggleJournalAction(id))
+                        alert(`An error occurred. Try again.`)           
+                    })       
+            }
+        }
+        
+        const handelDeleteJournal = (journal) => {
+            return (dispatch) => {
+                dispatch(removeJournalAction(journal.id))
+                return removeJournal(journal.id)
+                    .catch(()=> {
+                        dispatch(addJournalAction(journal))
+                        alert(`An error occurred. Try again.`)
+                    })
             }
         }
 
@@ -305,7 +343,7 @@
     </script>
     <!-- React Hooks -->
     <script type='text/babel'>
-        const ListHooks = ({items, remove, toggle}) => {
+        const List = ({items, remove, toggle}) => {
             return (
                 <ul>
                     {items.map((item) => (
@@ -322,7 +360,7 @@
             )
         }
 
-        const TodosHooks = ({ todos, dispatch }) => {
+        const Todos = ({ todos, dispatch }) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
             const addItem = (e) => {
@@ -349,15 +387,15 @@
                     />
                     
                     <button onClick={addItem} disabled={name === ''}><i className="fa fa-plus" aria-hidden="true"></i></button>
-                    <ListHooks items={todos} remove={removeItem} toggle={toggleItem} /> 
+                    <List items={todos} remove={removeItem} toggle={toggleItem} /> 
                 </div>                       
             )
        }
 
-       const ConnectedTodosHooks = ReactRedux.connect((state, dispatch)=> ({
+       const ConnectedTodos = ReactRedux.connect((state, dispatch)=> ({
            todos: state.todos, 
            dispatch
-       }))(TodosHooks)
+       }))(Todos)
        
         const GoalsHooks = ({ goals, dispatch }) => {
             const [name, setName ] = React.useState('')
@@ -385,17 +423,17 @@
                     />
                     <button onClick={addItem} disabled={name === ''}><i className="fa fa-plus" aria-hidden="true"></i></button>
 
-                    <ListHooks items={goals} remove={removeItem} />
+                    <List items={goals} remove={removeItem} />
                 </div>
             )
         }
 
-        const ConnectedGoalsHooks = ReactRedux.connect((state, dispatch ) => ({
+        const ConnectedGoals = ReactRedux.connect((state, dispatch ) => ({
             goals: state.goals, 
             dispatch
         }))(GoalsHooks)
 
-        const AppHooks = ({ loading, dispatch }) => {
+        const App = ({ loading, dispatch }) => {
             const [, updateState] = React.useState();
             const [start, setStart] = React.useState(false);
             const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -415,20 +453,20 @@
             
             return (
                 <React.Fragment>
-                    <ConnectedTodosHooks/>
-                    <ConnectedGoalsHooks />
+                    <ConnectedTodos/>
+                    <ConnectedGoals />
                 </React.Fragment>
             )
         }
 
-        const ConnectedAppHooks = ReactRedux.connect((state, dispatch) => ({
+        const ConnectedApp = ReactRedux.connect((state, dispatch) => ({
             loading: state.loading,
             dispatch
-        }))(AppHooks)
+        }))(App)
 
         ReactDOM.render(
             <ReactRedux.Provider store={store}>
-                <ConnectedAppHooks />
+                <ConnectedApp />
             </ReactRedux.Provider>,
             document.getElementById('root')
         )
