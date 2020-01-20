@@ -173,7 +173,7 @@
             }
         }
         
-        const handelDeleteJournal = (journal) => {
+        const handleDeleteJournal = (journal) => {
             return (dispatch) => {
                 dispatch(removeJournalAction(journal.id))
                 return removeJournal(journal.id)
@@ -360,6 +360,42 @@
             )
         }
 
+        const Journals = ({ journals, dispatch }) => {
+            const [name, setName] = React.useState('')
+            const handleChange = (event) => setName(event.target.value)
+            const addItem = (e) => {
+                e.preventDefault()
+
+                dispatch(handleAddJournal(
+                    name,
+                    () => setName('')
+                ))
+            }
+
+            const toggleItem = (id) => dispatch(handleToggleJournal(id))
+            const removeItem = (id) => dispatch(handleDeleteJournal(id))
+
+            return (
+                <div>
+                    <h1><i className="fa fa-leaf" aria-hidden="true"></i>Journals</h1>
+                    <input
+                        type='text'
+                        id='name'
+                        value={name}
+                        placeholder="Add Journal"
+                        onChange={handleChange}
+                         /> 
+                    <button onClick={addItem} disabled={name === ''}><i className="fa fa-plus" aria-hidden></i></button>
+                    <List items={journals} remove={removeItem} toggle={toggleItem} />
+                </div>
+            )
+        }
+
+        const ConnectedJournals = ReactRedux.connect((state, dispatch) => ({
+            journals: state.journals,
+            dispatch
+        }))(Journals)
+
         const Todos = ({ todos, dispatch }) => {
             const [name, setName] = React.useState('')
             const handleChange = (event) => setName(event.target.value)
@@ -453,6 +489,7 @@
             
             return (
                 <React.Fragment>
+                    <ConnectedJournals />
                     <ConnectedTodos/>
                     <ConnectedGoals />
                 </React.Fragment>
