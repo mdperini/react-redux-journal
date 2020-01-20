@@ -16,7 +16,8 @@
     <div id='root'></div>
 
     <script type='text/javascript'>
-
+        const generateId = () => Math.random().toString(36).substring(2) + (new Date()).getTime().toString();
+      
         // App code
         const ADD_JOURNAL = 'ADD_JOURNAL'
         const UPDATE_JOURNAL = 'UPDATE_JOURNAL'
@@ -32,12 +33,15 @@
 
         const RECEIVE_DATA = 'RECEIVE_DATA'   
     
+        const _journals = 
+                [
+                    { id:  generateId(), name: 'journal 1'}, 
+                    { id:  generateId(), name: 'journal 2'}, 
+                    { id:  generateId(), name: 'journal 3'}]
+    
         const retrieveJournals = () => {
             return new Promise(function(resolve, reject) {
-                const journals = [{ name: 'journal 1'}, { name: 'journal 2'}, { name: 'journal 3'}]
-                setTimeout(function() {
-                    resolve(journals); 
-                }, 300);
+                setTimeout(function() { resolve(_journals); }, 300);
             })
         }
 
@@ -289,6 +293,8 @@
                         Object.assign({}, journal, {complete: !journal.complete}))
                 case REMOVE_JOURNAL:
                     return state.filter((journal) => journal.id !== action.id)
+                case RECEIVE_DATA:
+                    return action.journals
                 default:
                     return state
             }
@@ -375,12 +381,13 @@
             const toggleItem = (id) => dispatch(handleToggleJournal(id))
             const removeItem = (id) => dispatch(handleDeleteJournal(id))
 
+            console.log('mike' + journals)
             return (
                 <div>
                     <h1><i className="fa fa-leaf" aria-hidden="true"></i>Journals</h1>
                     <input
                         type='text'
-                        id='name'
+                        id='name_journal'
                         value={name}
                         placeholder="Add Journal"
                         onChange={handleChange}
@@ -416,7 +423,7 @@
                     <h1><i className="fa fa-leaf" aria-hidden="true"></i>Todos</h1>
                     <input
                         type='text'
-                        id='name'
+                        id='name_todos'
                         value={name}
                         placeholder='Add Todo'
                         onChange={handleChange}
