@@ -33,11 +33,12 @@
 
         const RECEIVE_DATA = 'RECEIVE_DATA'   
     
-        const _journals = 
+        let _journals = 
                 [
-                    { id:  generateId(), name: 'journal 1'}, 
-                    { id:  generateId(), name: 'journal 2'}, 
-                    { id:  generateId(), name: 'journal 3'}]
+                    { id:  generateId(), name: 'Journal from 2020'}, 
+                    { id:  generateId(), name: 'Journal from 2019'}, 
+                    { id:  generateId(), name: 'Journal prior 2019'}
+                ]
     
         const retrieveJournals = () => {
             return new Promise(function(resolve, reject) {
@@ -45,11 +46,16 @@
             })
         }
 
-        const saveJournal = (journal) => {
+        const saveJournal = (name) => {
             return new Promise(function(resolve, reject) {
-                console.log(`journals ${journals}`)
-                setTimeout(function() {
-                    resolve(journal); 
+                 const _journal = {
+                     id: generateId(),
+                     name: name
+                 }
+         
+                 _journals =  _journals.concat([_journals])
+                 setTimeout(function() {
+                    resolve(_journal); 
                 }, 300);
             })
         }
@@ -371,7 +377,7 @@
             const handleChange = (event) => setName(event.target.value)
             const addItem = (e) => {
                 e.preventDefault()
-
+                console.log('mike 2' + name);
                 dispatch(handleAddJournal(
                     name,
                     () => setName('')
